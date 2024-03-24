@@ -36,7 +36,18 @@ async def on_message(message: Message) -> None:
     user_message: str = message.content
     channel: str = str(message.channel)
 
-    await send_message(message, user_message)
+    if user_message[0:14] == '>load datacard':
+        if len(message.attachments)==1:
+            attachment= message.attachments[0]
+            save_path = os.path.join('./', attachment.filename) #UPDATE DATACARD STORAGE DIRECTORY
+            await attachment.save(save_path)
+            await message.channel.send('Datacard saved')
+        else:
+            await message.channel.send('Corsika-Bot is only allowed to receive 1 datacard')
+
+    else:
+        await send_message(message, user_message)
+                
 
 def main() -> None:
     client.run(token=TOKEN)
